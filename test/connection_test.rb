@@ -1,33 +1,33 @@
 require "helper"
 
 describe Alexa::Connection do
+  let(:timestamp) { "20120808T205832Z" }
+
   it "calculates signature" do
     connection = Alexa::Connection.new(:access_key_id => "fake", :secret_access_key => "fake")
-    connection.stubs(:timestamp).returns("2012-08-08T20:58:32.000Z")
+    connection.stubs(:timestamp).returns(timestamp)
 
-    assert_equal "3uaSV1s7uJUtIDivvM8mzPkNxq+Za8jAFCDnQOvjRH4=", connection.signature
+    assert_equal "4ec8389d5a8adaaa119b08ff10d4f3549fccf48cbf56b7c9cdcd42e90b4d49ca", connection.signature
   end
 
   it "normalizes non string params value" do
     connection = Alexa::Connection.new(:access_key_id => "fake", :secret_access_key => "fake")
-    connection.stubs(:timestamp).returns("2012-08-08T20:58:32.000Z")
+    connection.stubs(:timestamp).returns(timestamp)
     connection.params = {:custom_value => 3}
 
-    expected = "AWSAccessKeyId=fake&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2012-08-08T20%3A58%3A32.000Z&Version=2005-07-11&custom_value=3"
-    assert_equal expected, connection.query
+    assert_equal "custom_value=3", connection.query
   end
 
   it "encodes space character" do
     connection = Alexa::Connection.new(:access_key_id => "fake", :secret_access_key => "fake")
-    connection.stubs(:timestamp).returns("2012-08-08T20:58:32.000Z")
+    connection.stubs(:timestamp).returns(timestamp)
     connection.params = {:custom_value => "two beers"}
 
-    expected = "AWSAccessKeyId=fake&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2012-08-08T20%3A58%3A32.000Z&Version=2005-07-11&custom_value=two%20beers"
-    assert_equal expected, connection.query
+    assert_equal "custom_value=two%20beers", connection.query
   end
 
   it "raises error when unathorized" do
-    stub_request(:get, %r{http://awis.amazonaws.com}).to_return(fixture("unathorized.txt"))
+    stub_request(:get, /#{API_URL}/).to_return(fixture("unathorized.txt"))
     connection = Alexa::Connection.new(:access_key_id => "wrong", :secret_access_key => "wrong")
 
     assert_raises Alexa::ResponseError do
@@ -36,7 +36,7 @@ describe Alexa::Connection do
   end
 
   it "raises error when forbidden" do
-    stub_request(:get, %r{http://awis.amazonaws.com}).to_return(fixture("forbidden.txt"))
+    stub_request(:get, /#{API_URL}/).to_return(fixture("forbidden.txt"))
     connection = Alexa::Connection.new(:access_key_id => "wrong", :secret_access_key => "wrong")
 
     assert_raises Alexa::ResponseError do

@@ -9,7 +9,7 @@ describe Alexa::API::CategoryBrowse do
 
   describe "parsing xml" do
     before do
-      stub_request(:get, %r{http://awis.amazonaws.com}).to_return(fixture("category_browse/card_games.txt"))
+      stub_request(:get, /#{API_URL}/).to_return(fixture("category_browse/card_games.txt"))
       @category_browse = Alexa::API::CategoryBrowse.new(:access_key_id => "fake", :secret_access_key => "fake")
       @category_browse.fetch(:path => "Top/Games/Card_Games")
     end

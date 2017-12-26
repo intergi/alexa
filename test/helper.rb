@@ -1,7 +1,6 @@
 require "minitest/autorun"
 require "webmock/minitest"
 require "mocha/setup"
-
 require "alexa"
 
 xml_parser = ENV["XML_PARSER"] || "libxml"
@@ -20,3 +19,5 @@ class MiniTest::Test
     File.read(File.join("test", "fixtures", filename))
   end
 end
+
+API_URL = 'https://awis.amazonaws.com/api'

@@ -8,7 +8,7 @@ describe Alexa::API::TrafficHistory do
   end
 
   it "defaults start to be in range to current time" do
-    stub_request(:get, %r{http://awis.amazonaws.com}).to_return(:body => "ok")
+    stub_request(:get, /#{API_URL}/).to_return(:body => "ok")
     @traffic_history = Alexa::API::TrafficHistory.new(:access_key_id => "fake", :secret_access_key => "fake")
     @traffic_history.fetch(:url => "github.com", :range => 14)
 
@@ -18,7 +18,7 @@ describe Alexa::API::TrafficHistory do
 
   describe "parsing xml" do
     before do
-      stub_request(:get, %r{http://awis.amazonaws.com}).to_return(fixture("traffic_history/github.txt"))
+      stub_request(:get, /#{API_URL}/).to_return(fixture("traffic_history/github.txt"))
       @traffic_history = Alexa::API::TrafficHistory.new(:access_key_id => "fake", :secret_access_key => "fake")
       @traffic_history.fetch(:url => "github.com")
     end
@@ -49,7 +49,7 @@ describe Alexa::API::TrafficHistory do
   end
 
   it "has error status code" do
-    stub_request(:get, %r{http://awis.amazonaws.com}).to_return(fixture("traffic_history/alexa_error.txt"))
+    stub_request(:get, /#{API_URL}/).to_return(fixture("traffic_history/alexa_error.txt"))
     traffic_history = Alexa::API::TrafficHistory.new(:access_key_id => "fake", :secret_access_key => "fake")
     traffic_history.fetch(:url => "amazon.com")
 
