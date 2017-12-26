@@ -1,7 +1,8 @@
 source "https://rubygems.org"
 
-group :extra do
-  gem "debugger"
+group :development do
+  gem "pry"
+  gem "pry-nav"
 end
 
 gem "rake"

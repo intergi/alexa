@@ -9,7 +9,7 @@ describe Alexa::API::SitesLinkingIn do
 
   describe "parsing xml" do
     before do
-      stub_request(:get, %r{http://awis.amazonaws.com}).to_return(fixture("sites_linking_in/github_count_3.txt"))
+      stub_request(:get, /#{API_URL}/).to_return(fixture("sites_linking_in/github_count_3.txt"))
       @sites_linking_in = Alexa::API::SitesLinkingIn.new(:access_key_id => "fake", :secret_access_key => "fake")
       @sites_linking_in.fetch(:url => "github.com", :count => 3)
     end
