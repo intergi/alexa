@@ -6,12 +6,16 @@ require 'pry'
 
 MultiXml.parser = 'nokogiri'
 
+unless ARGV[0] && ARGV[1]
+  puts "Usage: ruby test.rb access_key_id secret_access_key"
+  exit 0
+end
+
 client = Alexa::Client.new(
-  access_key_id:     "AKIAI6PLPJPHKFRRIDHQ",
-  secret_access_key: "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"
+  access_key_id:     ARGV[0],
+  secret_access_key: ARGV[1]
 )
 
-url_info = client.url_info(url: "google.com")
-puts url_info.rank
+puts client.url_info(url: "google.com").rank
 
 
