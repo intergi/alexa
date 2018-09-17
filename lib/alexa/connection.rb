@@ -48,7 +48,9 @@ module Alexa
           raise ResponseError.new(nil, response)
         else
           xml = MultiXml.parse(response.body)
-          message = xml["Response"]["Errors"]["Error"]["Message"]
+          keys = ['UrlInfoResponse', 'Response', 'UrlInfoResult', 'Alexa', 'Request', 'Errors', 'Error', 'ErrorCode']
+          message = xml.dig(*keys) || response.body
+
           raise ResponseError.new(message, response)
         end
       else
